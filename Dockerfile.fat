@@ -1,0 +1,13 @@
+FROM python:3.10
+
+# System deps
+RUN apt update && apt install -y git vim wget
+
+# Install libs
+RUN pip install torch torchvision pillow
+
+WORKDIR /app
+COPY model.pt .
+COPY inference.py .
+
+ENTRYPOINT ["python", "inference.py"]
