@@ -1,0 +1,24 @@
+(base) PS C:\Users\Serhii\lesson-3> docker run --rm -v ${PWD}/test_images:/img torch-slim /img/cat.jpg
+Top-3 predictions:
+Class index: 281, Score: 11.8103
+Class index: 285, Score: 11.8030
+Class index: 282, Score: 10.4993
+
+(base) PS C:\Users\Serhii\lesson-3> docker run --rm -v ${PWD}/test_images:/img torch-slim /img/cat1.jpg
+Top-3 predictions:
+Class index: 282, Score: 15.3237
+Class index: 281, Score: 15.2348
+Class index: 287, Score: 13.4068
+
+(base) PS C:\Users\Serhii\lesson-3> docker run --rm -v ${PWD}/test_images:/img torch-fat /img/cat.jpg 
+Top-3 predictions:
+Class index: 669, Score: 13.6503
+Class index: 794, Score: 10.7407
+Class index: 846, Score: 10.6883
+
+(base) PS C:\Users\Serhii\lesson-3> docker run --rm -v ${PWD}/test_images:/img torch-fat /img/cat1.jpg
+Top-3 predictions:
+Class index: 285, Score: 13.3168
+Class index: 282, Score: 11.4949
+Class index: 281, Score: 11.2165
+

@@ -1,0 +1,35 @@
+# Comparison: Fat vs Slim Docker Images
+
+## 1. Image Sizes
+- Fat image: 12.4 GB
+- Slim image: 994 MB
+
+# різниця в розмірах
+Torch + torchvision за замовчуванням встановлюють CUDA-версію
+Встановлені build-залежності (gcc, python3-dev)
+Неочищені APT кеші
+
+
+## 2. Layers
+- Fat: 12 layers
+- Slim: 8 layers
+
+## 3. Redundant tools in Fat image
+- apt cache
+- git, vim
+- build-essential
+- bash history
+- pip cache
+
+Slim image contains only:
+- Python runtime
+- model.pt
+- inference.py
+- required libs
+
+## 4. Optimizations suggestions
+- Use torch CPU-only wheel
+- Use FROM scratch (ultra-minimal)
+- Quantize model → reduce model.pt
+- Use ONNX + onnxruntime
+- Remove imagenet labels from final stage
