@@ -1,0 +1,75 @@
+# ===== Disable Dex (OIDC) =====
+dex:
+  enabled: false
+
+# ===== Redis (safe low mode) =====
+redis:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+# ===== Application Controller =====
+controller:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 200Mi
+    limits:
+      cpu: 250m
+      memory: 400Mi
+
+# ===== Repo Server (VERY IMPORTANT!) =====
+repoServer:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+
+# ===== ArgoCD Server (UI/API) =====
+server:
+  replicas: 1
+  service:
+    type: ClusterIP
+  resources:
+    requests:
+      cpu: 50m
+      memory: 150Mi
+    limits:
+      cpu: 200m
+      memory: 300Mi
+
+# ===== Notifications Controller =====
+notifications:
+  enabled: true
+  resources:
+    requests:
+      cpu: 20m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 150Mi
+
+# ===== ApplicationSet Controller =====
+applicationset:
+  enabled: true
+  resources:
+    requests:
+      cpu: 20m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 150Mi
+
+# ===== Disable TLS for UI =====
+configs:
+  params:
+    server.insecure: true

@@ -1,45 +1,60 @@
-# Lesson 3 — TorchScript + Docker (FAT & SLIM)
+# GOIT ARGO — GitOps Deployment with ArgoCD + AWS EKS
 
-## 1. Export TorchScript model
-```bash
-python export_model.py
-```
+You should already have:
+- An EKS cluster created (from Homework 5–6)
 
-## 2. Build Docker images
-```bash
-docker build -f docker/Dockerfile.fat -t torch-fat .
-docker build -f docker/Dockerfile.slim -t torch-slim .
-```
+## 1. Create your git-repo with Helm-deployment
+my repo 
+https://github.com/Serhii-Khodyka/goit-argo.git
 
-## 3. Run inference
+## 2. Add Git repository and check IP and S3
+file variables.tf
+app_repo_url https://github.com/Serhii-Khodyka/goit-argo.git
+eks_state_bucket  serhii-my-tf-state-bucket
+backend.tf s3-bucket serhii-my-tf-state-bucket
 
-### Windows PowerShell (recommended)
-Replace the path with your own project directory.
+## 3. Deploy ArgoCD via Terraform
+cd terraform/argocd
+terraform init
+terraform apply -auto-approve
 
-```powershell
-docker run --rm -v C:\\Users\\Serhii\\lesson-3\\test_images:/img torch-fat /img/cat.jpg
-docker run --rm -v C:\\Users\\Serhii\\lesson-3\\test_images:/img torch-slim /img/cat.jpg
-```
+## 4. Verify Deployment
+kubectl get pods -n application
 
-### Linux/macOS
-```bash
-docker run --rm -v ${PWD}/test_images:/img torch-fat /img/cat.jpg
-docker run --rm -v ${PWD}/test_images:/img torch-slim /img/cat.jpg
-```
+## 5. Access ArgoCD UI
+kubectl port-forward svc/argocd-server -n agrocd 8080:80
 
-## 4. Verify volume mounting (debug)
-```powershell
-docker run --rm -it -v C:\\Users\\Serhii\\lesson-3\\test_images:/img python:3.10-slim bash
-ls /img
-```
+http://localhost:8080
 
-## 5. Check Docker image layers
-```bash
-docker history torch-fat
-docker history torch-slim
-```
+kubectl -n agrocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 
-## 6. Summary
-- FAT image: full environment
-- SLIM image: optimized, CPU-only torch
-- Both support `/img/<file>` inference
+or for Windows
+kubectl -n agrocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" > enc.txt
+certutil -decode enc.txt dec.txt
+type dec.txt
+
+Login:
+username: admin
+password: from the link above
+
+## 6. ArgoCD Application Configuration
+
+ArgoCD automatically uses the file:
+applications/nginx-app.yaml
+from your https://github.com/Serhii-Khodyka/goit-argo.git
+This file defines a GitOps deployment for the Helm chart.
+
+Once pushed to GitHub, ArgoCD will automatically:
+detect changes
+render the Helm chart
+apply changes to the cluster
+keep resources in Sync
+
+## 7. Check ArgoCD Applications
+kubectl get applications -n argocd
+
+Expected return 
+nginx-app   Synced   Healthy
+
+## Recommendations. Deleting after working
+terraform destroy -auto-approve
