@@ -5,20 +5,31 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://charts.bitnami.com/bitnami
-    chart: minio
-    targetRevision: 12.10.2
-    helm:
-      releaseName: minio
-      values: |
-        defaultBuckets: "mlflow-artifacts"
-        auth:
-          rootUser: admin
-          rootPassword: admin123
   destination:
     server: https://kubernetes.default.svc
     namespace: mlflow
+  source:
+    repoURL: https://charts.min.io/
+    chart: minio
+    targetRevision: 5.0.13
+    helm:
+      releaseName: minio
+      values: |
+        mode: standalone
+        replicas: 1
+
+        rootUser: admin
+        rootPassword: admin123
+
+        image:
+          repository: quay.io/minio/minio
+          tag: RELEASE.2024-02-24T17-11-14Z
+          pullPolicy: IfNotPresent
+
+        buckets:
+          - name: mlflow-artifacts
+            policy: none
+            purge: false
   syncPolicy:
     automated:
       prune: true
