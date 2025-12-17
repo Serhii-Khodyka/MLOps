@@ -2,4 +2,12 @@
 .terraform/
 *.tfstate
 *.tfstate.*
+.crash.log
+
+# Terraform lock (можна залишати або ні)
 .terraform.lock.hcl
+
+# OS / IDE
+.vscode/
+.idea/
+*.exe
