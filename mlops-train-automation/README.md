@@ -20,11 +20,14 @@ mlops-train-automation/
 │    ├── validate.zip
 │    └── log_metrics.zip
 ├── .gitlab-ci.yml
+|── .github/
+|   └── workflows/
+|       └──train.yaml
 ├── README.md
 
 
 ---
-1. Збірка Lambda-функцій
+1.Збірка Lambda-функцій
 
 ```bash
 cd terraform/lambda
@@ -57,23 +60,15 @@ Set-Content -Path input.json -Value '{ "source": "manual" }'
 
 Потім запускай Step Function вручну
 
-4. GitHub CI
+4. GitHub 
 GitHub запускає Step Function при пуші в main.
 
-Додай змінні CI як Environment secrets: 
+Також в main потрібно розмістити .github/workflows/train.yaml
+
+Додай змінні CI як Environment secrets для prod: 
 AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
 AWS_DEFAULT_REGION
 STEP_FUNCTION_ARN
 
-Запуск:
-train-model
-→ AWS Step Function
-→ Lambda Validate
-→ Lambda LogMetrics
 
-5. Приклад input JSON
-{
-  "source": "gitlab-ci",
-  "commit": "a1b2c3d4"
-}
