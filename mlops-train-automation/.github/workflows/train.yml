@@ -3,7 +3,7 @@ name: Train pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "lesson-10" ]
 
 jobs:
   train:
